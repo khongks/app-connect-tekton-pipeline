@@ -6,9 +6,9 @@ metadata:
   name: ibm-appconnect
   namespace: openshift-operators
 spec:
-  channel: v9.1
+  channel: v9.2
   installPlanApproval: Automatic
   name: ibm-appconnect
   source: ibm-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: ibm-appconnect.v9.1.0
+  startingCSV: ibm-appconnect.v9.2.0

@@ -7,3 +7,6 @@ ca.p12
 **/dashboard.yaml
 simple-pipelinerun.yaml
 complex-pipelinerun.yaml
+.github_pat
+.ibm_entitlement
+.notes
