@@ -88,7 +88,7 @@ The Advanced Lab is based on Cloud Pak for Integration 2023.2.1. The versions of
     ```sh
     Now using project "postgresql" on server "https://api.64e01bd0fa254600179b97b4.cloud.techzone.ibm.com:6443".
     ```
-1. Set RWO block storageclass as default storageclass.
+1. Set RWO block storageclass as default storageclass. Skip if the block storage class is already default (maybe the case).
     ```sh
     oc patch storageclass ${BLOCK_STORAGECLASS} -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
     ```
@@ -147,9 +147,8 @@ The Advanced Lab is based on Cloud Pak for Integration 2023.2.1. The versions of
 ## Deploy "sample-ace-application" integration server using Tekton
 
 1. Go to the folder `app-connect-tekton-pipeline`.
-1. Setup environment variables.
+1. Setup environment variables (you need to `export FILE_STORAGECLASS` in previous step).
     ```sh
-    export FILE_STORAGECLASS=ocs-storagecluster-cephfs
     export ACE_LICENSE=L-LFMR-BTD75V
     export ACE_VERSION=12.0.9.0-r1
     export ACE_IMAGE_URL=cp.icr.io/cp/appc/ace-server-prod@sha256:246828d9f89c4ed3a6719cd3e4b71b1dec382f848c9bf9c28156f78fa05bc4e7
@@ -181,6 +180,14 @@ The Advanced Lab is based on Cloud Pak for Integration 2023.2.1. The versions of
 
 ## Test `sample-ace-application` integration server
 
+1. You should have downloaded the [Apache Kafka package](https://kafka.apache.org/quickstart). Unzip the tgz file.
+    ```sh
+    tar zvxf kafka_2.13-3.5.0.tgz
+    ```
+1. Go to the folder
+   ```sh
+   cd kafka_2.13-3.5.0/bin
+   ```
 1. Produce a message to the Kafka topic that will trigger the complex ACE flow.
     ```sh
     BOOTSTRAP=$(oc get eventstreams event-backbone -neventstreams -ojsonpath='{.status.kafkaListeners[1].bootstrapServers}')
