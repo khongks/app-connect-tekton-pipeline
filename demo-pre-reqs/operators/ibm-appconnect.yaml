@@ -11,4 +11,4 @@ spec:
   name: ibm-appconnect
   source: ibm-operator-catalog
   sourceNamespace: openshift-marketplace
-  startingCSV: ibm-appconnect.v9.1.0
+#  startingCSV: ibm-appconnect.v9.1.0

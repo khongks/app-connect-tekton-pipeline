@@ -77,19 +77,24 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
         ```sh
         oc get sc
         ```
-        Results:
+        Samples Results (depending on your environment):
         ```sh
-        NAME                          PROVISIONER                             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-        localblock                    kubernetes.io/no-provisioner            Delete          WaitForFirstConsumer   false                  109m
-        ocs-storagecluster-ceph-rbd   openshift-storage.rbd.csi.ceph.com      Delete          Immediate              true                   103m
-        ocs-storagecluster-ceph-rgw   openshift-storage.ceph.rook.io/bucket   Delete          Immediate              false                  106m
-        ocs-storagecluster-cephfs     openshift-storage.cephfs.csi.ceph.com   Delete          Immediate              true                   103m
-        openshift-storage.noobaa.io   openshift-storage.noobaa.io/obc         Delete          Immediate              false                  101m
+        NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+        efs-sc          efs.csi.aws.com         Delete          Immediate              false                  172m
+        gp2             kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   true                   3h40m
+        gp2-csi         ebs.csi.aws.com         Delete          WaitForFirstConsumer   true                   3h36m
+        gp3 (default)   ebs.csi.aws.com         Delete          WaitForFirstConsumer   true                   3h40m
+        gp3-csi         ebs.csi.aws.com         Delete          WaitForFirstConsumer   true                   3h36m
         ```
-    1. From the terminal, export the storage classes.
+    1. From the terminal, export the storage classes (depending on your environment):
         ```sh        
-        export FILE_STORAGECLASS=ocs-storagecluster-cephfs
-        export BLOCK_STORAGECLASS=ocs-storagecluster-ceph-rbd
+        export FILE_STORAGECLASS=<YOUR ENV>
+        export BLOCK_STORAGECLASS=<YOUR ENV>
+        ```
+        Example
+        ```sh
+        export FILE_STORAGECLASS=efs-sc
+        export BLOCK_STORAGECLASS=gp3
         ```
 ## Install Cloud Pak for Integration operators
 
@@ -134,9 +139,8 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
     ```sh
     secret/ibm-entitlement-key created
     ```
-1. Setup environment variables.
+1. Setup environment variables (you need to `export FILE_STORAGECLASS` in previous step).
     ```sh
-    export FILE_STORAGECLASS=ocs-storagecluster-cephfs
     export CP4I_LICENSE=L-YBXJ-ADJNSM
     export CP4I_VERSION=2023.2.1
     envsubst < cp4i/platform-navigator.yaml.tmpl > cp4i/platform-navigator.yaml
@@ -167,6 +171,24 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
     NAME        REPLICAS   VERSION      STATUS   READY   LASTUPDATE   AGE   MESSAGE
     navigator   1          2023.2.1-1   Ready    True    51m          85m   Platform UI has been provisioned.
     ```
+1. (Optional) Troubleshooting Tips
+
+    1. Check the pods and PVCs in the `ibm-common-services` namespace.
+        ```sh
+        oc get po -n ibm-common-services
+        ```
+        ```sh
+        oc get pvc -n ibm-common-services
+        ```
+    
+    1. Check the pods and PVCs in the `integration` namespace.
+        ```sh
+        oc get po -n integration
+        ```
+        ```sh
+        oc get pvc -n integration
+        ```
+
 1. Access Platform UI to verify installation
     1. Get URL.
         ```sh
@@ -202,12 +224,11 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
     ```sh
     secret/ibm-entitlement-key created
     ```
-1. Setup environment variables.
+1. Setup environment variables (you need to `export FILE_STORAGECLASS` in previous step).
     ```sh
-    export FILE_STORAGECLASS=ocs-storagecluster-cephfs
     export ACE_LICENSE=L-LFMR-BTD75V
     export ACE_VERSION=12.0.9.0-r1
-    envsubst < cp4i/platform-navigator.yaml.tmpl > cp4i/platform-navigator.yaml
+    envsubst < appconnect/dashboard.yaml.tmpl > appconnect/dashboard.yaml
     ```
 1. Install ACE Dashboard UI.
     ```sh
@@ -320,9 +341,8 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
 ## Deploy "simple-demo" integration server using Tekton
 
 1. Go to the folder `app-connect-tekton-pipeline`.
-1. Setup environment variables.
+1. Setup environment variables. (you need to `export FILE_STORAGECLASS` in previous step).
     ```sh
-    export FILE_STORAGECLASS=ocs-storagecluster-cephfs
     export ACE_LICENSE=L-LFMR-BTD75V
     export ACE_VERSION=12.0.9.0-r1
     export ACE_IMAGE_URL=cp.icr.io/cp/appc/ace-server-prod@sha256:246828d9f89c4ed3a6719cd3e4b71b1dec382f848c9bf9c28156f78fa05bc4e7
