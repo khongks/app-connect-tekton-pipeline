@@ -207,7 +207,7 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
     export FILE_STORAGECLASS=ocs-storagecluster-cephfs
     export ACE_LICENSE=L-LFMR-BTD75V
     export ACE_VERSION=12.0.9.0-r1
-    envsubst < cp4i/platform-navigator.yaml.tmpl > cp4i/platform-navigator.yaml
+    envsubst < appconnect/dashboard.yaml.tmpl > appconnect/dashboard.yaml
     ```
 1. Install ACE Dashboard UI.
     ```sh
