@@ -147,7 +147,7 @@ The Basic Lab is based on Cloud Pak for Integration 2023.2.1. The versions of ea
     ```
 1. Install Platform UI.
     ```sh
-    oc apply -f ./cp4i
+    oc apply -f ./cp4i/platform-navigator.yaml
     ```
     Results:
     ```sh
